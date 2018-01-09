@@ -1,3 +1,8 @@
+#canvas {
+  background: #222;
+  height: calc(100vh - 55px);
+}
+
 #main-toolbar #activity-button {
   background-image: url(../activity/activity-icon.svg);
 }
