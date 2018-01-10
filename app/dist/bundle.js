@@ -9762,6 +9762,7 @@ var Board = function (_Component) {
               isLast: index === 5,
               value: _this5.state.gameState[indexRow][index].value,
               key: index,
+              id: 'cell-' + indexRow + '-' + index,
               themeColor: _this5.theme[_this5.state.gameState[indexRow][index].reserved],
               onCellClick: function onCellClick() {
                 _this5.onCellClick(indexRow, index);
@@ -12301,7 +12302,7 @@ Object.defineProperty(exports, "__esModule", {
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _templateObject = _taggedTemplateLiteral(['\n  position: relative;\n  width: 70px;\n  height: 70px;\n  background: #222;\n  margin-right: ', '\n'], ['\n  position: relative;\n  width: 70px;\n  height: 70px;\n  background: #222;\n  margin-right: ', '\n']),
-    _templateObject2 = _taggedTemplateLiteral(['\n  position: absolute;\n  z-index: 10;\n  width: 25px;\n  height: 25px;\n  background: ', ';\n  border-radius: 50%;\n  top: ', ';\n  left: ', ';\n  &.move-top {\n    transform: translateY(-70px);\n  }\n  &.move-bottom {\n    transform: translateY(70px)\n  }\n  &.move-left {\n    transform: translateX(-70px)\n  }\n  &.move-right {\n    transform: translateX(70px)\n  }\n'], ['\n  position: absolute;\n  z-index: 10;\n  width: 25px;\n  height: 25px;\n  background: ', ';\n  border-radius: 50%;\n  top: ', ';\n  left: ', ';\n  &.move-top {\n    transform: translateY(-70px);\n  }\n  &.move-bottom {\n    transform: translateY(70px)\n  }\n  &.move-left {\n    transform: translateX(-70px)\n  }\n  &.move-right {\n    transform: translateX(70px)\n  }\n']);
+    _templateObject2 = _taggedTemplateLiteral(['\n  position: absolute;\n  z-index: 10;\n  width: 25px;\n  height: 25px;\n  background: ', ';\n  border-radius: 50%;\n  top: ', ';\n  left: ', ';\n  transition: transform 0.4s all ease-in-out;\n  &.move-top {\n    transform: translateY(-70px);\n  }\n  &.move-bottom {\n    transform: translateY(70px)\n  }\n  &.move-left {\n    transform: translateX(-70px)\n  }\n  &.move-right {\n    transform: translateX(70px)\n  }\n'], ['\n  position: absolute;\n  z-index: 10;\n  width: 25px;\n  height: 25px;\n  background: ', ';\n  border-radius: 50%;\n  top: ', ';\n  left: ', ';\n  transition: transform 0.4s all ease-in-out;\n  &.move-top {\n    transform: translateY(-70px);\n  }\n  &.move-bottom {\n    transform: translateY(70px)\n  }\n  &.move-left {\n    transform: translateX(-70px)\n  }\n  &.move-right {\n    transform: translateX(70px)\n  }\n']);
 
 var _react = __webpack_require__(1);
 
@@ -12368,7 +12369,7 @@ var Cell = function (_Component) {
       var balls = [null, this.oneBall(), this.twoBall(), this.threeBall()];
       return _react2.default.createElement(
         CellWrapper,
-        { isLast: this.props.isLast, onClick: this.props.onCellClick },
+        { isLast: this.props.isLast, onClick: this.props.onCellClick, id: this.props.id },
         balls[this.props.value]
       );
     }

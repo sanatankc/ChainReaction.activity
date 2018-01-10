@@ -91,7 +91,6 @@ class Board extends Component {
     }
   }
 
-
   burstCell(cell) {
     const {gameState} = this.state
     const gameStateCopy = gameState.concat()
@@ -138,6 +137,7 @@ class Board extends Component {
             isLast={index === 5}
             value={this.state.gameState[indexRow][index].value}
             key={index}
+            id={`cell-${indexRow}-${index}`}
             themeColor={this.theme[this.state.gameState[indexRow][index].reserved]}
             onCellClick={() => {
               this.onCellClick(indexRow, index)

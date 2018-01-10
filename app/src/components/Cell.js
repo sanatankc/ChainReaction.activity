@@ -23,6 +23,7 @@ const Ball = styled.div`
   border-radius: 50%;
   top: ${props => props.position[0] + 'px'};
   left: ${props => props.position[1] + 'px'};
+  transition: transform 0.4s all ease-in-out;
   &.move-top {
     transform: translateY(-70px);
   }
@@ -59,7 +60,7 @@ export default class Cell extends Component {
   render() {
     const balls = [null, this.oneBall(), this.twoBall(), this.threeBall()]
     return (
-      <CellWrapper isLast={this.props.isLast} onClick={this.props.onCellClick}>
+      <CellWrapper isLast={this.props.isLast} onClick={this.props.onCellClick} id={this.props.id}>
         {balls[this.props.value]}
       </CellWrapper>
     )
