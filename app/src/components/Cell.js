@@ -16,6 +16,19 @@ const Ball = styled.div`
   border-radius: 50%;
   top: ${props => props.position[0] + 'px'};
   left: ${props => props.position[1] + 'px'};
+  transition: all 3s ease-in-out ;
+  &.move-top {
+    transform: translateY(-70px);
+  }
+  &.move-bottom {
+    transform: translateY(70px)
+  }
+  &.move-left {
+    transform: translateX(-70px)
+  }
+  &.move-right {
+    transform: translateX(70px)
+  }
 `
 
 export default class Cell extends Component {

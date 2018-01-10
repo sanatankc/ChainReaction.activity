@@ -7820,7 +7820,7 @@ var App = function (_Component) {
       return _react2.default.createElement(
         Container,
         null,
-        _react2.default.createElement(_Board2.default, null)
+        _react2.default.createElement(_Board2.default, { id: 'game-board' })
       );
     }
   }]);
@@ -7880,6 +7880,12 @@ var GameContainer = _styledComponents2.default.div(_templateObject, function (pr
 var Row = _styledComponents2.default.div(_templateObject2, function (props) {
   return props.isLast ? '0px' : '2px';
 });
+var isOnEdge = function isOnEdge(x, y) {
+  return x === 0 && y === 0 || x === 5 && y === 0 || x === 0 && y == 8 || x === 5 && y === 8;
+};
+var isOnSide = function isOnSide(x, y) {
+  return !isOnEdge(x, y) && (x === 0 || x === 5 || y === 0 || y === 8);
+};
 
 var Board = function (_Component) {
   _inherits(Board, _Component);
@@ -7908,33 +7914,150 @@ var Board = function (_Component) {
   }, {
     key: 'onCellClick',
     value: function onCellClick(indexRow, index) {
+      var _this2 = this;
+
       var cellValue = this.state.gameState[indexRow][index].value;
       // console.log(cellValue)
       var stateCopy = [].concat(_toConsumableArray(this.state.gameState));
-      console.log(stateCopy[indexRow][index].reserved !== null);
 
       if (stateCopy[indexRow][index].reserved !== null && stateCopy[indexRow][index].reserved !== this.state.turn) return;
       // console.log(Object.assign({} ,stateCopy))
-      console.log(stateCopy[indexRow][index]);
-      if (cellValue !== 3) {
+      if (cellValue < 4) {
         stateCopy[indexRow][index].value = cellValue + 1;
         stateCopy[indexRow][index].reserved = this.state.turn;
       }
 
-      console.log(stateCopy);
       this.setState(function (prevState) {
         return {
-          gameState: stateCopy,
-          turn: prevState.turn === 0 ? 1 : 0
+          gameState: stateCopy
         };
       }, function () {
-        // console.log(this.state)
+        _this2.checkBoard();
       });
+    }
+  }, {
+    key: 'checkBoard',
+    value: function checkBoard() {
+      var _this3 = this;
+
+      var shouldBurst = function shouldBurst(x, y, value) {
+        return isOnEdge(x, y) && value > 1 || isOnSide(x, y) && value > 2 || !isOnEdge(x, y) && !isOnSide(x, y) && value > 3;
+      };
+
+      var burstList = [];
+      this.state.gameState.map(function (row, y) {
+        row.map(function (cell, x) {
+          if (cell.value !== 0) {
+            if (shouldBurst(x, y, cell.value)) {
+              burstList.push({ x: x, y: y });
+              console.log('Burst: ', x, y);
+            }
+          }
+        });
+      });
+
+      burstList.forEach(function (cell) {
+        _this3.burstCell(cell);
+      });
+      if (burstList.length === 0) {
+        this.setState(function (prevState) {
+          return { turn: prevState.turn === 0 ? 1 : 0 };
+        });
+      }
+    }
+  }, {
+    key: 'burstCell',
+    value: function burstCell(cell) {
+      var _this4 = this;
+
+      var gameState = this.state.gameState;
+
+      var gameStateCopy = gameState.concat();
+      var x = cell.x,
+          y = cell.y;
+
+      var cellElem = document.querySelector('#game-board').children[y].children[x];
+      // cellElem.children[0].classList.add('move-left')
+      cellElem.children[0].classList.add('move-left');
+      cellElem.children[1].classList.add('move-bottom');
+      // gameStateCopy[y][x].value = 0
+      // gameStateCopy[y][x].reserved = null
+      var burst = function burst() {
+        if (isOnEdge(x, y)) {
+          if (x === 0 && y === 0) {
+            gameStateCopy[y][x + 1].value++;
+            gameStateCopy[y + 1][x].value++;
+            gameStateCopy[y][x + 1].reserved = _this4.state.turn;
+            gameStateCopy[y + 1][x].reserved = _this4.state.turn;
+          } else if (x === 5 && y === 0) {
+            gameStateCopy[y][x - 1].value++;
+            gameStateCopy[y + 1][x].value++;
+            gameStateCopy[y][x - 1].reserved = _this4.state.turn;
+            gameStateCopy[y + 1][x].reserved = _this4.state.turn;
+          } else if (x === 0 && y === 8) {
+            gameStateCopy[y - 1][x].value++;
+            gameStateCopy[y][x + 1].value++;
+            gameStateCopy[y - 1][x].reserved = _this4.state.turn;
+            gameStateCopy[y][x + 1].reserved = _this4.state.turn;
+          } else {
+            gameStateCopy[y][x - 1].value++;
+            gameStateCopy[y - 1][x].value++;
+            gameStateCopy[y][x - 1].reserved = _this4.state.turn;
+            gameStateCopy[y - 1][x].reserved = _this4.state.turn;
+          }
+        } else if (isOnSide(x, y)) {
+          if (x === 0 || x === 5) {
+            gameStateCopy[y - 1][x].value++;
+            gameStateCopy[y + 1][x].value++;
+            gameStateCopy[y - 1][x].reserved = _this4.state.turn;
+            gameStateCopy[y + 1][x].reserved = _this4.state.turn;
+            if (x === 0) {
+              gameStateCopy[y][x + 1].value++;
+              gameStateCopy[y][x + 1].reserved = _this4.state.turn;
+            } else {
+              gameStateCopy[y][x - 1].value++;
+              gameStateCopy[y][x - 1].reserved = _this4.state.turn;
+            }
+          } else if (y === 0 || y === 8) {
+            gameStateCopy[y][x - 1].value++;
+            gameStateCopy[y][x - 1].reserved = _this4.state.turn;
+            gameStateCopy[y][x + 1].value++;
+            gameStateCopy[y][x + 1].reserved = _this4.state.turn;
+            if (y === 0) {
+              gameStateCopy[y + 1][x].value++;
+              gameStateCopy[y + 1][x].reserved = _this4.state.turn;
+            } else {
+              gameStateCopy[y - 1][x].value++;
+              gameStateCopy[y - 1][x].reserved = _this4.state.turn;
+            }
+          }
+        } else {
+          gameStateCopy[y - 1][x].value++;
+          gameStateCopy[y + 1][x].value++;
+          gameStateCopy[y][x - 1].value++;
+          gameStateCopy[y][x + 1].value++;
+          gameStateCopy[y - 1][x].reserved = _this4.state.turn;
+          gameStateCopy[y + 1][x].reserved = _this4.state.turn;
+          gameStateCopy[y][x - 1].reserved = _this4.state.turn;
+          gameStateCopy[y][x + 1].reserved = _this4.state.turn;
+        }
+      };
+
+      // window.setTimeout(this.)
+
+      // this.setState({gameState: gameStateCopy}, () => {
+      //   window.setTimeout(this.checkBoard.bind(this), 1000)
+      // })
+    }
+  }, {
+    key: 'decideNeighour',
+    value: function decideNeighour(x, y) {
+      if (x === 0, y === 0) {}
     }
   }, {
     key: 'generateBoard',
     value: function generateBoard() {
-      var _this2 = this;
+      var _this5 = this;
 
       return this.state.gameState.map(function (row, indexRow) {
         return _react2.default.createElement(
@@ -7943,11 +8066,11 @@ var Board = function (_Component) {
           row.map(function (state, index) {
             return _react2.default.createElement(_Cell2.default, {
               isLast: index === 5,
-              value: _this2.state.gameState[indexRow][index].value,
+              value: _this5.state.gameState[indexRow][index].value,
               key: index,
-              themeColor: _this2.theme[_this2.state.gameState[indexRow][index].reserved],
+              themeColor: _this5.theme[_this5.state.gameState[indexRow][index].reserved],
               onCellClick: function onCellClick() {
-                _this2.onCellClick(indexRow, index);
+                _this5.onCellClick(indexRow, index);
               }
             });
           })
@@ -7959,7 +8082,7 @@ var Board = function (_Component) {
     value: function render() {
       return _react2.default.createElement(
         GameContainer,
-        { themeColor: this.theme[this.state.turn] },
+        { themeColor: this.theme[this.state.turn], id: 'game-board' },
         this.generateBoard()
       );
     }
@@ -12278,7 +12401,7 @@ Object.defineProperty(exports, "__esModule", {
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _templateObject = _taggedTemplateLiteral(['\n  position: relative;\n  width: 70px;\n  height: 70px;\n  background: #222;\n  margin-right: ', '\n'], ['\n  position: relative;\n  width: 70px;\n  height: 70px;\n  background: #222;\n  margin-right: ', '\n']),
-    _templateObject2 = _taggedTemplateLiteral(['\n  position: absolute;\n  width: 25px;\n  height: 25px;\n  background: ', ';\n  border-radius: 50%;\n  top: ', ';\n  left: ', ';\n'], ['\n  position: absolute;\n  width: 25px;\n  height: 25px;\n  background: ', ';\n  border-radius: 50%;\n  top: ', ';\n  left: ', ';\n']);
+    _templateObject2 = _taggedTemplateLiteral(['\n  position: absolute;\n  width: 25px;\n  height: 25px;\n  background: ', ';\n  border-radius: 50%;\n  top: ', ';\n  left: ', ';\n  transition: all 3s ease-in-out ;\n  &.move-top {\n    transform: translateY(-70px);\n  }\n  &.move-bottom {\n    transform: translateY(70px)\n  }\n  &.move-left {\n    transform: translateX(-70px)\n  }\n  &.move-right {\n    transform: translateX(70px)\n  }\n'], ['\n  position: absolute;\n  width: 25px;\n  height: 25px;\n  background: ', ';\n  border-radius: 50%;\n  top: ', ';\n  left: ', ';\n  transition: all 3s ease-in-out ;\n  &.move-top {\n    transform: translateY(-70px);\n  }\n  &.move-bottom {\n    transform: translateY(70px)\n  }\n  &.move-left {\n    transform: translateX(-70px)\n  }\n  &.move-right {\n    transform: translateX(70px)\n  }\n']);
 
 var _react = __webpack_require__(2);
 
