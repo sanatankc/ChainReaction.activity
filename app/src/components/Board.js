@@ -49,11 +49,11 @@ class Board extends Component {
     this.setState(prevState => ({
       gameState: stateCopy,
     }), () => {
-      this.checkBoard()
+      this.processBoard()
     })
   }
 
-  checkBoard() {
+  burstCells() {
     const shouldBurst = (x, y, value) =>
       (isOnEdge(x,y) && value > 1) ||
       (isOnSide(x,y) && value > 2) ||
@@ -71,25 +71,37 @@ class Board extends Component {
           }
         })
       })
-
-      burstList.forEach((cell) => {
-        this.burstCell(cell)
-      })
-      if (burstList.length === 0) {
-        this.setState(prevState => ({turn: (prevState.turn === 0) ? 1 : 0}))
-      }
+    return burstList
   }
+
+  changeTurns() {
+    this.setState(prevState => ({turn: (prevState.turn === 0) ? 1 : 0}))
+  }
+
+  processBoard(burstList) {
+    if (!burstList) {
+      burstList = this.burstCells()
+    }
+
+    burstList.forEach((cell) => {
+      this.burstCell(cell)
+    })
+    if (burstList.length === 0) {
+      this.changeTurns()
+    }
+  }
+
 
   burstCell(cell) {
     const {gameState} = this.state
     const gameStateCopy = gameState.concat()
     const {x, y} = cell
-    gameStateCopy[y][x].value = 0
-    gameStateCopy[y][x].reserved = null
     const isLeft = x - 1 >= 0
     const isRight = x + 1 <= 5
     const isTop = y - 1 >= 0
     const isBottom = y + 1 <= 8
+    gameStateCopy[y][x].value = 0
+    gameStateCopy[y][x].reserved = null
     if (isLeft) {
       gameStateCopy[y][x - 1].value++
       gameStateCopy[y][x - 1].reserved = this.state.turn
@@ -107,14 +119,8 @@ class Board extends Component {
       gameStateCopy[y+1][x].reserved = this.state.turn
     }
     this.setState({gameState: gameStateCopy}, () => {
-      window.setTimeout(this.checkBoard.bind(this), 1000)
+      window.setTimeout(this.processBoard.bind(this), 1000)
     })
-  }
-
-  decideNeighour(x, y) {
-    if (x === 0, y === 0) {
-
-    }
   }
 
   generateBoard() {

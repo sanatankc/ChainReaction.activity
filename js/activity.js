@@ -9665,14 +9665,12 @@ var Board = function (_Component) {
           gameState: stateCopy
         };
       }, function () {
-        _this2.checkBoard();
+        _this2.processBoard();
       });
     }
   }, {
-    key: 'checkBoard',
-    value: function checkBoard() {
-      var _this3 = this;
-
+    key: 'burstCells',
+    value: function burstCells() {
       var shouldBurst = function shouldBurst(x, y, value) {
         return isOnEdge(x, y) && value > 1 || isOnSide(x, y) && value > 2 || !isOnEdge(x, y) && !isOnSide(x, y) && value > 3;
       };
@@ -9688,14 +9686,29 @@ var Board = function (_Component) {
           }
         });
       });
+      return burstList;
+    }
+  }, {
+    key: 'changeTurns',
+    value: function changeTurns() {
+      this.setState(function (prevState) {
+        return { turn: prevState.turn === 0 ? 1 : 0 };
+      });
+    }
+  }, {
+    key: 'processBoard',
+    value: function processBoard(burstList) {
+      var _this3 = this;
+
+      if (!burstList) {
+        burstList = this.burstCells();
+      }
 
       burstList.forEach(function (cell) {
         _this3.burstCell(cell);
       });
       if (burstList.length === 0) {
-        this.setState(function (prevState) {
-          return { turn: prevState.turn === 0 ? 1 : 0 };
-        });
+        this.changeTurns();
       }
     }
   }, {
@@ -9709,12 +9722,12 @@ var Board = function (_Component) {
       var x = cell.x,
           y = cell.y;
 
-      gameStateCopy[y][x].value = 0;
-      gameStateCopy[y][x].reserved = null;
       var isLeft = x - 1 >= 0;
       var isRight = x + 1 <= 5;
       var isTop = y - 1 >= 0;
       var isBottom = y + 1 <= 8;
+      gameStateCopy[y][x].value = 0;
+      gameStateCopy[y][x].reserved = null;
       if (isLeft) {
         gameStateCopy[y][x - 1].value++;
         gameStateCopy[y][x - 1].reserved = this.state.turn;
@@ -9732,13 +9745,8 @@ var Board = function (_Component) {
         gameStateCopy[y + 1][x].reserved = this.state.turn;
       }
       this.setState({ gameState: gameStateCopy }, function () {
-        window.setTimeout(_this4.checkBoard.bind(_this4), 1000);
+        window.setTimeout(_this4.processBoard.bind(_this4), 1000);
       });
-    }
-  }, {
-    key: 'decideNeighour',
-    value: function decideNeighour(x, y) {
-      if (x === 0, y === 0) {}
     }
   }, {
     key: 'generateBoard',
