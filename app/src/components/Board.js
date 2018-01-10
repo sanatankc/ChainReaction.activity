@@ -119,7 +119,14 @@ class Board extends Component {
       gameStateCopy[y+1][x].reserved = this.state.turn
     }
     this.setState({gameState: gameStateCopy}, () => {
-      window.setTimeout(this.processBoard.bind(this), 1000)
+      const burstList = this.burstCells()
+      if (burstList.length !== 0) {
+        window.setTimeout(() => {
+          this.processBoard(burstList)
+        }, 1000)
+      } else {
+        this.changeTurns()
+      }
     })
   }
 

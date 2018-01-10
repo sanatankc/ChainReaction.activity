@@ -9745,7 +9745,14 @@ var Board = function (_Component) {
         gameStateCopy[y + 1][x].reserved = this.state.turn;
       }
       this.setState({ gameState: gameStateCopy }, function () {
-        window.setTimeout(_this4.processBoard.bind(_this4), 1000);
+        var burstList = _this4.burstCells();
+        if (burstList.length !== 0) {
+          window.setTimeout(function () {
+            _this4.processBoard(burstList);
+          }, 1000);
+        } else {
+          _this4.changeTurns();
+        }
       });
     }
   }, {
@@ -12301,7 +12308,7 @@ Object.defineProperty(exports, "__esModule", {
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _templateObject = _taggedTemplateLiteral(['\n  position: relative;\n  width: 70px;\n  height: 70px;\n  background: #222;\n  margin-right: ', '\n'], ['\n  position: relative;\n  width: 70px;\n  height: 70px;\n  background: #222;\n  margin-right: ', '\n']),
-    _templateObject2 = _taggedTemplateLiteral(['\n  position: absolute;\n  z-index: 10;\n  width: 25px;\n  height: 25px;\n  background: ', ';\n  border-radius: 50%;\n  top: ', ';\n  left: ', ';\n  transition: all 3s ease-in-out ;\n  &.move-top {\n    transform: translateY(-70px);\n  }\n  &.move-bottom {\n    transform: translateY(70px)\n  }\n  &.move-left {\n    transform: translateX(-70px)\n  }\n  &.move-right {\n    transform: translateX(70px)\n  }\n'], ['\n  position: absolute;\n  z-index: 10;\n  width: 25px;\n  height: 25px;\n  background: ', ';\n  border-radius: 50%;\n  top: ', ';\n  left: ', ';\n  transition: all 3s ease-in-out ;\n  &.move-top {\n    transform: translateY(-70px);\n  }\n  &.move-bottom {\n    transform: translateY(70px)\n  }\n  &.move-left {\n    transform: translateX(-70px)\n  }\n  &.move-right {\n    transform: translateX(70px)\n  }\n']);
+    _templateObject2 = _taggedTemplateLiteral(['\n  position: absolute;\n  z-index: 10;\n  width: 25px;\n  height: 25px;\n  background: ', ';\n  border-radius: 50%;\n  top: ', ';\n  left: ', ';\n  &.move-top {\n    transform: translateY(-70px);\n  }\n  &.move-bottom {\n    transform: translateY(70px)\n  }\n  &.move-left {\n    transform: translateX(-70px)\n  }\n  &.move-right {\n    transform: translateX(70px)\n  }\n'], ['\n  position: absolute;\n  z-index: 10;\n  width: 25px;\n  height: 25px;\n  background: ', ';\n  border-radius: 50%;\n  top: ', ';\n  left: ', ';\n  &.move-top {\n    transform: translateY(-70px);\n  }\n  &.move-bottom {\n    transform: translateY(70px)\n  }\n  &.move-left {\n    transform: translateX(-70px)\n  }\n  &.move-right {\n    transform: translateX(70px)\n  }\n']);
 
 var _react = __webpack_require__(1);
 

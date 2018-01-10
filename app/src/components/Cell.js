@@ -23,7 +23,6 @@ const Ball = styled.div`
   border-radius: 50%;
   top: ${props => props.position[0] + 'px'};
   left: ${props => props.position[1] + 'px'};
-  transition: all 3s ease-in-out ;
   &.move-top {
     transform: translateY(-70px);
   }
