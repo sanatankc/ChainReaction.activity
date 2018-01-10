@@ -13,7 +13,11 @@ class App extends Component {
 
   render() {
     return (
-      <Container>
+      <Container onClick={() => {
+        const cellElem = document.querySelector('#game-board').children[0].children[0]
+        cellElem.children[0].classList.add('move-top')
+        // console.log(document.querySelector('.cell').classList.add('move-top'))
+      }}>
         <Board id='game-board' />
       </Container>
     )

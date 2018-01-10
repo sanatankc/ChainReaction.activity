@@ -1,5 +1,11 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
+import styled, { injectGlobal } from 'styled-components'
+
+/* injectGlobal`
+  .cell {
+    transition: all 3s ease-in-ou
+  }
+` */
 
 const CellWrapper = styled.div`
   position: relative;
@@ -10,6 +16,7 @@ const CellWrapper = styled.div`
 `
 const Ball = styled.div`
   position: absolute;
+  z-index: 10;
   width: 25px;
   height: 25px;
   background: ${props => props.themeColor};
@@ -33,7 +40,7 @@ const Ball = styled.div`
 
 export default class Cell extends Component {
   oneBall() {
-    return <Ball themeColor={this.props.themeColor} position={[23, 23]}/>
+    return <Ball themeColor={this.props.themeColor} position={[23, 23]} className='cell'/>
   }
 
   twoBall() {

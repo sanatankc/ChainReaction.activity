@@ -84,79 +84,31 @@ class Board extends Component {
     const {gameState} = this.state
     const gameStateCopy = gameState.concat()
     const {x, y} = cell
-    const cellElem = document.querySelector('#game-board').children[y].children[x]
-    // cellElem.children[0].classList.add('move-left')
-    cellElem.children[0].classList.add('move-left')
-    cellElem.children[1].classList.add('move-bottom')
-    // gameStateCopy[y][x].value = 0
-    // gameStateCopy[y][x].reserved = null
-    const burst = () => {
-      if (isOnEdge(x, y)) {
-        if (x === 0 && y === 0) {
-          gameStateCopy[y][x + 1].value++
-          gameStateCopy[y + 1][x].value++
-          gameStateCopy[y][x + 1].reserved = this.state.turn
-          gameStateCopy[y + 1][x].reserved = this.state.turn
-        } else if (x === 5 && y === 0) {
-            gameStateCopy[y][x - 1].value++
-            gameStateCopy[y + 1][x].value++
-            gameStateCopy[y][x - 1].reserved = this.state.turn
-            gameStateCopy[y + 1][x].reserved = this.state.turn
-        } else if (x === 0 && y === 8) {
-            gameStateCopy[y - 1][x].value++
-            gameStateCopy[y][x + 1].value++
-            gameStateCopy[y - 1][x].reserved = this.state.turn
-            gameStateCopy[y][x + 1].reserved = this.state.turn
-        } else {
-            gameStateCopy[y][x - 1].value++
-            gameStateCopy[y - 1][x].value++
-            gameStateCopy[y][x - 1].reserved = this.state.turn
-            gameStateCopy[y - 1][x].reserved = this.state.turn
-        }
-      } else if (isOnSide(x, y)) {
-        if (x === 0 || x === 5) {
-          gameStateCopy[y-1][x].value++
-          gameStateCopy[y+1][x].value++
-          gameStateCopy[y-1][x].reserved = this.state.turn
-          gameStateCopy[y+1][x].reserved = this.state.turn
-          if (x === 0) {
-            gameStateCopy[y][x+1].value++
-            gameStateCopy[y][x+1].reserved = this.state.turn
-          } else {
-            gameStateCopy[y][x-1].value++
-            gameStateCopy[y][x-1].reserved = this.state.turn
-          }
-
-        } else if (y === 0 || y === 8) {
-          gameStateCopy[y][x-1].value++
-          gameStateCopy[y][x-1].reserved = this.state.turn
-          gameStateCopy[y][x+1].value++
-          gameStateCopy[y][x+1].reserved = this.state.turn
-          if (y === 0) {
-            gameStateCopy[y+1][x].value++
-            gameStateCopy[y+1][x].reserved = this.state.turn
-          } else {
-            gameStateCopy[y-1][x].value++
-            gameStateCopy[y-1][x].reserved = this.state.turn
-          }
-        }
-      } else {
-        gameStateCopy[y-1][x].value++
-        gameStateCopy[y+1][x].value++
-        gameStateCopy[y][x-1].value++
-        gameStateCopy[y][x+1].value++
-        gameStateCopy[y-1][x].reserved = this.state.turn
-        gameStateCopy[y+1][x].reserved = this.state.turn
-        gameStateCopy[y][x-1].reserved = this.state.turn
-        gameStateCopy[y][x+1].reserved = this.state.turn
-      }
+    gameStateCopy[y][x].value = 0
+    gameStateCopy[y][x].reserved = null
+    const isLeft = x - 1 >= 0
+    const isRight = x + 1 <= 5
+    const isTop = y - 1 >= 0
+    const isBottom = y + 1 <= 8
+    if (isLeft) {
+      gameStateCopy[y][x - 1].value++
+      gameStateCopy[y][x - 1].reserved = this.state.turn
     }
-
-    // window.setTimeout(this.)
-
-    // this.setState({gameState: gameStateCopy}, () => {
-    //   window.setTimeout(this.checkBoard.bind(this), 1000)
-    // })
+    if (isRight) {
+      gameStateCopy[y][x + 1].value++
+      gameStateCopy[y][x + 1].reserved = this.state.turn
+    }
+    if (isTop) {
+      gameStateCopy[y-1][x].value++
+      gameStateCopy[y-1][x].reserved = this.state.turn
+    }
+    if (isBottom) {
+      gameStateCopy[y+1][x].value++
+      gameStateCopy[y+1][x].reserved = this.state.turn
+    }
+    this.setState({gameState: gameStateCopy}, () => {
+      window.setTimeout(this.checkBoard.bind(this), 1000)
+    })
   }
 
   decideNeighour(x, y) {
@@ -185,7 +137,7 @@ class Board extends Component {
 
   render() {
     return (
-        <GameContainer themeColor={this.theme[this.state.turn]} id='game-board'>
+        <GameContainer themeColor={this.theme[this.state.turn]}>
           {this.generateBoard()}
         </GameContainer>
     )
