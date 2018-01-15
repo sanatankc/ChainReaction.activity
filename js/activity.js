@@ -13285,7 +13285,6 @@ var Toolbar = function (_Component) {
         _react2.default.createElement('button', { className: 'toolbutton', id: 'activity-button', title: 'Chain Reaction' }),
         _react2.default.createElement('button', { className: 'toolbutton pull-right', id: 'stop-button', title: 'Stop' }),
         _react2.default.createElement(HelpButton, { id: 'help-button', title: 'help', onClick: function onClick() {
-            console.log('hello');
             _this2.props.onHelpClick();
           } })
       );

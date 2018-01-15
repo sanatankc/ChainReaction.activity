@@ -12,7 +12,6 @@ class Toolbar extends Component {
         <button className="toolbutton" id="activity-button" title="Chain Reaction"></button>
         <button className="toolbutton pull-right" id="stop-button" title="Stop"></button>
         <HelpButton id='help-button' title='help' onClick={() => {
-          console.log('hello')
           this.props.onHelpClick()
         }}/>
       </div>
