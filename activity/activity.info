@@ -1,7 +1,7 @@
 [Activity]
-name = Bingo
+name = Chain Reaction
 activity_version = 1
-bundle_id = org.sugarlabs.Bingo
+bundle_id = org.sugarlabs.ChainReaction
 exec = sugar-activity-web
 icon = activity-icon
-repository = https://github.com/EmilyOng/Bingo.activity.git
+repository = https://github.com/sanatankc/ChainReaction.activity
