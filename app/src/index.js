@@ -7,22 +7,20 @@ class Main extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      counter: 1
+      help: false
     }
+  }
+  onHelpClick() {
+    this.setState(prev => ({help: !prev.help}))
   }
   render () {
     return (
       <div>
         <ToolBar
-          onIncrement={() => {
-            this.setState(prev => ({counter: prev.counter + 1}))
-          }}
-          onDecrement={() => {
-            this.setState(prev => ({counter: prev.counter - 1}))
-          }}
+          onHelpClick={this.onHelpClick.bind(this)}
         />
         <div id='canvas'>
-          <App counter={this.state.counter} />
+          <App counter={this.state.counter} help={this.state.help} />
         </div>
       </div>
     )

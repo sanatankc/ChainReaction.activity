@@ -8,7 +8,7 @@ const Container = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
-  z-index: 20;
+  z-index: 22;
 }`
 
 const Main = styled.div`
@@ -18,6 +18,8 @@ const Main = styled.div`
   background: white;
   padding: 15px 30px;
   border-radius: 5px;
+  width: 100%;
+  height: 100%;
 `
 const WinText = styled.div`
   font-size: 36px;
@@ -44,18 +46,20 @@ const Instructions = styled.div`
   width: 330px;
 `
 
-export default class GameOverUI extends Component {
+export default class HelpUI extends Component {
   render() {
     return (
       <Container>
         <Main>
-          {this.props.isThisFirstTime
-            ? [<Welcome key='welcome'>Welcome</Welcome>,
-              <Instructions key='instructions'>Objective: The Objective of Chain Reaction is to take control of the board by eliminating your opponents orbits.</Instructions>]
-            : [<OverText key='overtext'>Game Over</OverText>,
-              <WinText key='wintext'><span>{this.props.winner === 0 ? 'Red': 'Green'}</span> Won</WinText>]
-          }
-          <PlayButton onClick={this.props.onPlayClick}></PlayButton>
+        <Welcome>Welcome</Welcome>
+        <Instructions>Objective: The Objective of Chain Reaction is to take control
+          of the board by eliminating your opponents orbits.</Instructions>
+        <Instructions>
+          Players takes it in turns to place their orbits in a cell. Once a cell has
+          reached critical masss the orbits explode into the surrounding cells adding
+          an extra orbits andd claiming cell for the player. A player may only place their
+          own colour. As soon as a player looses all their orbs they are out of the game.
+        </Instructions>
         </Main>
       </Container>
     )

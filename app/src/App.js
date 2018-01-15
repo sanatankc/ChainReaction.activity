@@ -13,7 +13,7 @@ class App extends Component {
   render() {
     return (
       <Container >
-        <Board id='game-board' />
+        <Board id='game-board' help={this.props.help} />
       </Container>
     )
   }

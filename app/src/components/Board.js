@@ -4,6 +4,7 @@ import { Easing, Tween, autoPlay } from 'es6-tween'
 import Cell from './Cell'
 import gameState from './gameState'
 import GameOverUI from './GameOver'
+import HelpUI from './HelpUI'
 
 autoPlay(true)
 
@@ -293,8 +294,11 @@ class Board extends Component {
   render() {
     return (
         <GameContainer themeColor={this.theme[this.state.turn]}>
+          {this.props.help &&
+            <HelpUI />
+          }
           {this.state.isGameOver &&
-            <GameOverUI winner={this.state.winner} onPlayClick={this.onPlayClick.bind(this)} isThisFirstTime={this.state.isThisFirstTime} />
+            <GameOverUI help={this.props.help} winner={this.state.winner} onPlayClick={this.onPlayClick.bind(this)} isThisFirstTime={this.state.isThisFirstTime} />
           }
           {this.generateBoard()}
         </GameContainer>
