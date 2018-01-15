@@ -51,7 +51,7 @@ export default class HelpUI extends Component {
     return (
       <Container>
         <Main>
-        <Welcome>Welcome</Welcome>
+        <Welcome>Objective</Welcome>
         <Instructions>Objective: The Objective of Chain Reaction is to take control
           of the board by eliminating your opponents orbits.</Instructions>
         <Instructions>

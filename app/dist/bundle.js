@@ -13360,7 +13360,7 @@ var HelpUI = function (_Component) {
           _react2.default.createElement(
             Welcome,
             null,
-            'Welcome'
+            'Objective'
           ),
           _react2.default.createElement(
             Instructions,
