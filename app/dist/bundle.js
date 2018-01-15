@@ -9565,7 +9565,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _templateObject = _taggedTemplateLiteral(['\n  background: ', ';\n  box-shadow: rgba(0, 0, 0, 0.2) 5px 5px 25px 0px;\n'], ['\n  background: ', ';\n  box-shadow: rgba(0, 0, 0, 0.2) 5px 5px 25px 0px;\n']),
+var _templateObject = _taggedTemplateLiteral(['\n  position: relative;\n  background: ', ';\n  box-shadow: rgba(0, 0, 0, 0.2) 5px 5px 25px 0px;\n'], ['\n  position: relative;\n  background: ', ';\n  box-shadow: rgba(0, 0, 0, 0.2) 5px 5px 25px 0px;\n']),
     _templateObject2 = _taggedTemplateLiteral(['\n  display: flex;\n  margin-bottom: ', ';\n'], ['\n  display: flex;\n  margin-bottom: ', ';\n']);
 
 var _react = __webpack_require__(1);
@@ -9585,6 +9585,10 @@ var _Cell2 = _interopRequireDefault(_Cell);
 var _gameState = __webpack_require__(41);
 
 var _gameState2 = _interopRequireDefault(_gameState);
+
+var _GameOver = __webpack_require__(43);
+
+var _GameOver2 = _interopRequireDefault(_GameOver);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -9663,11 +9667,11 @@ var animateCells = function animateCells(cellsToAnimate, callback) {
       }
     }
   }).start();
-  tween.on('complete', function () {
+  setTimeout(function () {
     if (callback) {
       callback();
     }
-  });
+  }, 700);
 };
 
 var isOnEdge = function isOnEdge(x, y) {
@@ -9687,9 +9691,11 @@ var Board = function (_Component) {
 
     _this.theme = ['#DD1155', '#00CC99'];
     _this.state = {
-      gameState: _gameState2.default,
+      gameState: (0, _gameState2.default)(),
       turn: 0,
-      canClick: true
+      canClick: true,
+      winner: null,
+      isGameOver: false
     };
     return _this;
   }
@@ -9734,12 +9740,35 @@ var Board = function (_Component) {
           if (cell.value !== 0) {
             if (shouldBurst(x, y, cell.value)) {
               burstList.push({ x: x, y: y });
-              console.log('Burst: ', x, y);
             }
           }
         });
       });
       return burstList;
+    }
+  }, {
+    key: 'shouldGameOver',
+    value: function shouldGameOver() {
+      var gameStateCopy = this.state.gameState;
+      var reservedGameState = gameStateCopy.map(function (row) {
+        return row.map(function (cell) {
+          return cell.reserved;
+        });
+      }).reduce(function (acc, cur) {
+        return acc.concat(cur);
+      }, []);
+      var isRedStillPlaying = reservedGameState.some(function (reserve) {
+        return reserve === 0;
+      });
+      var isGreenStillPlaying = reservedGameState.some(function (reserve) {
+        return reserve === 1;
+      });
+      if (!isRedStillPlaying) {
+        return 1;
+      } else if (!isGreenStillPlaying) {
+        return 0;
+      }
+      return null;
     }
   }, {
     key: 'changeTurns',
@@ -9880,6 +9909,15 @@ var Board = function (_Component) {
         }
 
         _this3.setState({ gameState: gameStateCopy }, function () {
+          var shouldGameOver = _this3.shouldGameOver();
+          if (shouldGameOver !== null) {
+            _this3.setState({
+              isGameOver: true,
+              winner: shouldGameOver
+            });
+            return;
+          }
+
           var burstList = _this3.burstCellsList();
           if (burstList.length !== 0) {
             _this3.processBoard(burstList);
@@ -9915,11 +9953,23 @@ var Board = function (_Component) {
       });
     }
   }, {
+    key: 'onPlayClick',
+    value: function onPlayClick() {
+      this.setState({
+        isGameOver: false,
+        gameState: (0, _gameState2.default)(),
+        turn: 0,
+        canClick: true,
+        winner: null
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
         GameContainer,
         { themeColor: this.theme[this.state.turn] },
+        this.state.isGameOver && _react2.default.createElement(_GameOver2.default, { winner: this.state.winner, onPlayClick: this.onPlayClick.bind(this) }),
         this.generateBoard()
       );
     }
@@ -12992,12 +13042,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
-/* injectGlobal`
-  .cell {
-    transition: all 3s ease-in-ou
-  }
-` */
-
 var CellWrapper = _styledComponents2.default.div(_templateObject, function (props) {
   return props.isLast ? '0px' : '2px';
 });
@@ -13066,7 +13110,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var gameState = [[{ "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }], [{ "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }], [{ "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }], [{ "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }], [{ "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }], [{ "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }], [{ "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }], [{ "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }], [{ "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }]];
+var gameState = function gameState() {
+  return [[{ "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }], [{ "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }], [{ "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }], [{ "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }], [{ "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }], [{ "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }], [{ "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }], [{ "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }], [{ "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }, { "player": null, "value": 0, reserved: null }]];
+};
 
 exports.default = gameState;
 
@@ -13134,6 +13180,94 @@ var Toolbar = function (_Component) {
 }(_react.Component);
 
 exports.default = Toolbar;
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _templateObject = _taggedTemplateLiteral(['\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 2;\n  text-align: center;\n}'], ['\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 2;\n  text-align: center;\n}']),
+    _templateObject2 = _taggedTemplateLiteral(['\n  display: flex;\n  align-items: center;\n  flex-direction: column;\n  background: white;\n  padding: 15px 30px;\n  border-radius: 5px;\n'], ['\n  display: flex;\n  align-items: center;\n  flex-direction: column;\n  background: white;\n  padding: 15px 30px;\n  border-radius: 5px;\n']),
+    _templateObject3 = _taggedTemplateLiteral(['\n  font-size: 36px;\n  margin-top: 20px;\n  margin-bottom: 20px;\n'], ['\n  font-size: 36px;\n  margin-top: 20px;\n  margin-bottom: 20px;\n']),
+    _templateObject4 = _taggedTemplateLiteral(['\n  font-size: 18px;\n  letter-spacing: 2.2px;\n'], ['\n  font-size: 18px;\n  letter-spacing: 2.2px;\n']),
+    _templateObject5 = _taggedTemplateLiteral(['\n  cursor: pointer;\n  width: 60px;\n  height: 50px;\n  background: url(\'icons/play.svg\');\n'], ['\n  cursor: pointer;\n  width: 60px;\n  height: 50px;\n  background: url(\'icons/play.svg\');\n']);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _styledComponents = __webpack_require__(7);
+
+var _styledComponents2 = _interopRequireDefault(_styledComponents);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var Container = _styledComponents2.default.div(_templateObject);
+
+var Main = _styledComponents2.default.div(_templateObject2);
+var WinText = _styledComponents2.default.div(_templateObject3);
+var OverText = _styledComponents2.default.div(_templateObject4);
+var PlayButton = _styledComponents2.default.div(_templateObject5);
+
+var GameOverUI = function (_Component) {
+  _inherits(GameOverUI, _Component);
+
+  function GameOverUI() {
+    _classCallCheck(this, GameOverUI);
+
+    return _possibleConstructorReturn(this, (GameOverUI.__proto__ || Object.getPrototypeOf(GameOverUI)).apply(this, arguments));
+  }
+
+  _createClass(GameOverUI, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        Container,
+        null,
+        _react2.default.createElement(
+          Main,
+          null,
+          _react2.default.createElement(
+            OverText,
+            null,
+            'Game Over'
+          ),
+          _react2.default.createElement(
+            WinText,
+            null,
+            _react2.default.createElement(
+              'span',
+              null,
+              this.props.winner === 0 ? 'Red' : 'Green'
+            ),
+            ' Won'
+          ),
+          _react2.default.createElement(PlayButton, { onClick: this.props.onPlayClick })
+        )
+      );
+    }
+  }]);
+
+  return GameOverUI;
+}(_react.Component);
+
+exports.default = GameOverUI;
 
 /***/ })
 /******/ ]);

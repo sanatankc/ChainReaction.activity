@@ -3,9 +3,12 @@ import styled from 'styled-components'
 import { Easing, Tween, autoPlay } from 'es6-tween'
 import Cell from './Cell'
 import gameState from './gameState'
+import GameOverUI from './GameOver'
+
 autoPlay(true)
 
 const GameContainer = styled.div`
+  position: relative;
   background: ${props => props.themeColor + '6b'};
   box-shadow: rgba(0, 0, 0, 0.2) 5px 5px 25px 0px;
 `
@@ -32,11 +35,11 @@ const animateCells = (cellsToAnimate, callback) => {
       }
     })
     .start()
-  tween.on('complete', () => {
-    if (callback) {
-      callback()
-    }
-  })
+    setTimeout(() => {
+      if (callback) {
+        callback()
+      }
+    }, 700)
 }
 
 const isOnEdge = (x,y) =>
@@ -44,14 +47,17 @@ const isOnEdge = (x,y) =>
 const isOnSide = (x, y) =>
   (!isOnEdge(x, y) && (x === 0 || x === 5 || y === 0 || y === 8))
 
+
 class Board extends Component {
   constructor(props) {
     super(props)
     this.theme = ['#DD1155', '#00CC99']
     this.state = {
-      gameState: gameState,
+      gameState: gameState(),
       turn: 0,
       canClick: true,
+      winner: null,
+      isGameOver: false,
     }
   }
 
@@ -71,7 +77,7 @@ class Board extends Component {
       }
 
       this.setState(prevState => ({
-        gameState: stateCopy,
+        gameState: stateCopy
       }), () => {
         this.processBoard()
       })
@@ -91,7 +97,6 @@ class Board extends Component {
           if (cell.value !== 0) {
             if (shouldBurst(x, y, cell.value)) {
               burstList.push({ x, y })
-              console.log('Burst: ', x, y)
             }
           }
         })
@@ -99,6 +104,20 @@ class Board extends Component {
     return burstList
   }
 
+  shouldGameOver() {
+    const gameStateCopy = this.state.gameState
+    const reservedGameState = gameStateCopy
+      .map(row => row.map(cell => cell.reserved))
+      .reduce(( acc, cur ) => acc.concat(cur), [])
+    const isRedStillPlaying = reservedGameState.some(reserve => reserve === 0)
+    const isGreenStillPlaying = reservedGameState.some(reserve => reserve === 1)
+    if (!isRedStillPlaying) {
+      return 1
+    } else if (!isGreenStillPlaying) {
+      return 0
+    }
+    return null
+  }
   changeTurns() {
     this.setState(prevState => ({turn: (prevState.turn === 0) ? 1 : 0}))
   }
@@ -218,6 +237,15 @@ class Board extends Component {
       }
 
       this.setState({gameState: gameStateCopy}, () => {
+        const shouldGameOver = this.shouldGameOver()
+        if (shouldGameOver !== null) {
+          this.setState({
+            isGameOver: true,
+            winner: shouldGameOver
+          })
+          return
+        }
+
         const burstList = this.burstCellsList()
         if (burstList.length !== 0) {
           this.processBoard(burstList)
@@ -242,15 +270,28 @@ class Board extends Component {
             onCellClick={() => {
               this.onCellClick(indexRow, index)
             }}
-           />
+          />
       )}
       </Row>
     ))
   }
 
+  onPlayClick() {
+    this.setState({
+      isGameOver: false,
+      gameState: gameState(),
+      turn: 0,
+      canClick: true,
+      winner: null
+     })
+  }
+
   render() {
     return (
         <GameContainer themeColor={this.theme[this.state.turn]}>
+          {this.state.isGameOver &&
+            <GameOverUI winner={this.state.winner} onPlayClick={this.onPlayClick.bind(this)} />
+          }
           {this.generateBoard()}
         </GameContainer>
     )

@@ -1,11 +1,6 @@
 import React, { Component } from 'react'
 import styled, { injectGlobal } from 'styled-components'
 
-/* injectGlobal`
-  .cell {
-    transition: all 3s ease-in-ou
-  }
-` */
 
 const CellWrapper = styled.div`
   position: relative;
