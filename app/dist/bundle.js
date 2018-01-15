@@ -13129,16 +13129,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _templateObject = _taggedTemplateLiteral(['\n  background: url(\'icons/plus.svg\')\n'], ['\n  background: url(\'icons/plus.svg\')\n']),
-    _templateObject2 = _taggedTemplateLiteral(['\n  background: url(\'icons/minus.svg\')\n'], ['\n  background: url(\'icons/minus.svg\')\n']);
-
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
-
-var _styledComponents = __webpack_require__(7);
-
-var _styledComponents2 = _interopRequireDefault(_styledComponents);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -13147,11 +13140,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
-var PlayButton = _styledComponents2.default.button(_templateObject);
-var MinusButton = _styledComponents2.default.button(_templateObject2);
 
 var Toolbar = function (_Component) {
   _inherits(Toolbar, _Component);
@@ -13163,15 +13151,13 @@ var Toolbar = function (_Component) {
   }
 
   _createClass(Toolbar, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       return _react2.default.createElement(
-        'div',
-        { id: 'main-toolbar', className: 'react-toolbar toolbar' },
-        _react2.default.createElement('button', { className: 'toolbutton', id: 'activity-button', title: 'Chain Reaction' }),
-        _react2.default.createElement('button', { className: 'toolbutton pull-right', id: 'stop-button', title: 'Stop' }),
-        _react2.default.createElement(PlayButton, { className: 'toolbutton', title: 'Plus', onClick: this.props.onIncrement }),
-        _react2.default.createElement(MinusButton, { className: 'toolbutton', title: 'Minus', onClick: this.props.onDecrement })
+        "div",
+        { id: "main-toolbar", className: "react-toolbar toolbar" },
+        _react2.default.createElement("button", { className: "toolbutton", id: "activity-button", title: "Chain Reaction" }),
+        _react2.default.createElement("button", { className: "toolbutton pull-right", id: "stop-button", title: "Stop" })
       );
     }
   }]);
