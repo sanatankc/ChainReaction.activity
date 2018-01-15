@@ -57,7 +57,8 @@ class Board extends Component {
       turn: 0,
       canClick: true,
       winner: null,
-      isGameOver: false,
+      isGameOver: true,
+      isThisFirstTime: true
     }
   }
 
@@ -277,6 +278,9 @@ class Board extends Component {
   }
 
   onPlayClick() {
+    if (this.state.isThisFirstTime) {
+      this.setState({isThisFirstTime: false})
+    }
     this.setState({
       isGameOver: false,
       gameState: gameState(),
@@ -290,7 +294,7 @@ class Board extends Component {
     return (
         <GameContainer themeColor={this.theme[this.state.turn]}>
           {this.state.isGameOver &&
-            <GameOverUI winner={this.state.winner} onPlayClick={this.onPlayClick.bind(this)} />
+            <GameOverUI winner={this.state.winner} onPlayClick={this.onPlayClick.bind(this)} isThisFirstTime={this.state.isThisFirstTime} />
           }
           {this.generateBoard()}
         </GameContainer>
@@ -298,5 +302,6 @@ class Board extends Component {
   }
 
 }
+
 
 export default Board

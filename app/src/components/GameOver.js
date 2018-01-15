@@ -8,8 +8,7 @@ const Container = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
-  z-index: 20;
-  text-align: center;
+  z-index: 2;
 }`
 
 const Main = styled.div`
@@ -35,13 +34,28 @@ const PlayButton = styled.div`
   height: 50px;
   background: url('icons/play.svg');
 `
+const Welcome = styled.div`
+  font-size: 36px;
+`
+const Instructions = styled.div`
+  font-size: 18px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 330px;
+`
+
 export default class GameOverUI extends Component {
   render() {
+    console.log(this.props.isThisFirstTime)
     return (
       <Container>
         <Main>
-          <OverText>Game Over</OverText>
-          <WinText><span>{this.props.winner === 0 ? 'Red': 'Green'}</span> Won</WinText>
+          {this.props.isThisFirstTime
+            ? [<Welcome key='welcome'>Welcome</Welcome>,
+              <Instructions key='instructions'>Objective: The Objective of Chain Reaction is to take control of the board by eliminating your opponents orbits.</Instructions>]
+            : [<OverText key='overtext'>Game Over</OverText>,
+              <WinText key='wintext'><span>{this.props.winner === 0 ? 'Red': 'Green'}</span> Won</WinText>]
+          }
           <PlayButton onClick={this.props.onPlayClick}></PlayButton>
         </Main>
       </Container>
