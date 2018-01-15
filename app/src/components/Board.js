@@ -31,7 +31,11 @@ const animateCells = (cellsToAnimate, callback) => {
       for (const cells of cellsToAnimate) {
         for (const balls of cells) {
           const cellElem = document.getElementById(`cell-${balls.y}-${balls.x}`)
-          cellElem.children[balls.index].style.setProperty('transform', `${animateMap[balls.toAnimate]}${animation.x}px`)
+          try {
+            cellElem.children[balls.index].style.setProperty('transform', `${animateMap[balls.toAnimate]}${animation.x}px`)
+          } catch(err) {
+            console.error(`Style seems to be undefined at ${balls.y} and ${balls.x}`)
+          }
         }
       }
     })

@@ -9635,7 +9635,11 @@ var animateCells = function animateCells(cellsToAnimate, callback) {
             var balls = _step2.value;
 
             var cellElem = document.getElementById('cell-' + balls.y + '-' + balls.x);
-            cellElem.children[balls.index].style.setProperty('transform', '' + animateMap[balls.toAnimate] + animation.x + 'px');
+            try {
+              cellElem.children[balls.index].style.setProperty('transform', '' + animateMap[balls.toAnimate] + animation.x + 'px');
+            } catch (err) {
+              console.error('Style seems to be undefined at ' + balls.y + ' and ' + balls.x);
+            }
           }
         } catch (err) {
           _didIteratorError2 = true;
