@@ -219,9 +219,7 @@ class Board extends Component {
 
   render() {
     return (
-        <GameContainer themeColor={this.theme[this.state.turn]} onClick={() => {
-          // this.animateCell(0, 0)
-        }}>
+        <GameContainer themeColor={this.theme[this.state.turn]}>
           {this.generateBoard()}
         </GameContainer>
     )

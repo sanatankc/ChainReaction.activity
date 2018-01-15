@@ -9912,9 +9912,7 @@ var Board = function (_Component) {
     value: function render() {
       return _react2.default.createElement(
         GameContainer,
-        { themeColor: this.theme[this.state.turn], onClick: function onClick() {
-            // this.animateCell(0, 0)
-          } },
+        { themeColor: this.theme[this.state.turn] },
         this.generateBoard()
       );
     }
