@@ -57,7 +57,7 @@ export default class Cell extends Component {
       <Ball themeColor={this.props.themeColor} position={[10, 23]} key={0} />,
       <Ball themeColor={this.props.themeColor} position={[35, 23]} key={1} />,
       <Ball themeColor={this.props.themeColor} position={[22, 8]} key={2} />,
-      <Ball themeColor={this.props.themeColor} position={[22, 36]} key={2} />
+      <Ball themeColor={this.props.themeColor} position={[22, 36]} key={3} />
     ]
   }
 

@@ -13080,7 +13080,7 @@ var Cell = function (_Component) {
   }, {
     key: 'fourBall',
     value: function fourBall() {
-      return [_react2.default.createElement(Ball, { themeColor: this.props.themeColor, position: [10, 23], key: 0 }), _react2.default.createElement(Ball, { themeColor: this.props.themeColor, position: [35, 23], key: 1 }), _react2.default.createElement(Ball, { themeColor: this.props.themeColor, position: [22, 8], key: 2 }), _react2.default.createElement(Ball, { themeColor: this.props.themeColor, position: [22, 36], key: 2 })];
+      return [_react2.default.createElement(Ball, { themeColor: this.props.themeColor, position: [10, 23], key: 0 }), _react2.default.createElement(Ball, { themeColor: this.props.themeColor, position: [35, 23], key: 1 }), _react2.default.createElement(Ball, { themeColor: this.props.themeColor, position: [22, 8], key: 2 }), _react2.default.createElement(Ball, { themeColor: this.props.themeColor, position: [22, 36], key: 3 })];
     }
   }, {
     key: 'render',
@@ -13180,7 +13180,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _templateObject = _taggedTemplateLiteral(['\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 2;\n  text-align: center;\n}'], ['\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 2;\n  text-align: center;\n}']),
+var _templateObject = _taggedTemplateLiteral(['\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 20;\n  text-align: center;\n}'], ['\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 20;\n  text-align: center;\n}']),
     _templateObject2 = _taggedTemplateLiteral(['\n  display: flex;\n  align-items: center;\n  flex-direction: column;\n  background: white;\n  padding: 15px 30px;\n  border-radius: 5px;\n'], ['\n  display: flex;\n  align-items: center;\n  flex-direction: column;\n  background: white;\n  padding: 15px 30px;\n  border-radius: 5px;\n']),
     _templateObject3 = _taggedTemplateLiteral(['\n  font-size: 36px;\n  margin-top: 20px;\n  margin-bottom: 20px;\n'], ['\n  font-size: 36px;\n  margin-top: 20px;\n  margin-bottom: 20px;\n']),
     _templateObject4 = _taggedTemplateLiteral(['\n  font-size: 18px;\n  letter-spacing: 2.2px;\n'], ['\n  font-size: 18px;\n  letter-spacing: 2.2px;\n']),
