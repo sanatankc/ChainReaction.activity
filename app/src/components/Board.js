@@ -51,6 +51,7 @@ class Board extends Component {
     this.state = {
       gameState: gameState,
       turn: 0,
+      canClick: true,
     }
   }
 
@@ -59,22 +60,22 @@ class Board extends Component {
   }
 
   onCellClick(indexRow, index) {
-    const cellValue = this.state.gameState[indexRow][index].value
-    // console.log(cellValue)
-    const stateCopy = [...this.state.gameState]
+    if (this.state.canClick) {
+      const cellValue = this.state.gameState[indexRow][index].value
+      const stateCopy = [...this.state.gameState]
 
-    if (stateCopy[indexRow][index].reserved !== null && stateCopy[indexRow][index].reserved !== this.state.turn) return
-    // console.log(Object.assign({} ,stateCopy))
-    if (cellValue < 4) {
-      stateCopy[indexRow][index].value = cellValue + 1
-      stateCopy[indexRow][index].reserved = this.state.turn
+      if (stateCopy[indexRow][index].reserved !== null && stateCopy[indexRow][index].reserved !== this.state.turn) return
+      if (cellValue < 4) {
+        stateCopy[indexRow][index].value = cellValue + 1
+        stateCopy[indexRow][index].reserved = this.state.turn
+      }
+
+      this.setState(prevState => ({
+        gameState: stateCopy,
+      }), () => {
+        this.processBoard()
+      })
     }
-
-    this.setState(prevState => ({
-      gameState: stateCopy,
-    }), () => {
-      this.processBoard()
-    })
   }
 
   burstCellsList() {
@@ -106,7 +107,9 @@ class Board extends Component {
     if (!burstList) {
       burstList = this.burstCellsList()
     }
+    this.setState({canClick: false})
     if (burstList.length === 0) {
+      this.setState({canClick: true})
       this.changeTurns()
       return
     }
@@ -219,6 +222,7 @@ class Board extends Component {
         if (burstList.length !== 0) {
           this.processBoard(burstList)
         } else {
+          this.setState({canClick: true})
           this.changeTurns()
         }
       })
