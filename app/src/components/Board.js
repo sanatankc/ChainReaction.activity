@@ -34,7 +34,7 @@ const animateCells = (cellsToAnimate, callback) => {
           try {
             cellElem.children[balls.index].style.setProperty('transform', `${animateMap[balls.toAnimate]}${animation.x}px`)
           } catch(err) {
-            console.error(`Style seems to be undefined at ${balls.y} and ${balls.x}`)
+            cells.pop(balls)
           }
         }
       }
@@ -65,10 +65,6 @@ class Board extends Component {
       isGameOver: true,
       isThisFirstTime: true
     }
-  }
-
-  drawCells() {
-
   }
 
   onCellClick(indexRow, index) {
