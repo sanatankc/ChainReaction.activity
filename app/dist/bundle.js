@@ -13295,12 +13295,12 @@ var HelpUI = function (_Component) {
           _react2.default.createElement(
             Instructions,
             null,
-            'Objective: The Objective of Chain Reaction is to take control of the board by eliminating your opponents orbits.'
+            'Objective: The objective of Chain Reaction is to take control of the board by eliminating your opponents orbits.'
           ),
           _react2.default.createElement(
             Instructions,
             null,
-            'Players takes it in turns to place their orbits in a cell. Once a cell has reached critical masss the orbits explode into the surrounding cells adding an extra orbits andd claiming cell for the player. A player may only place their own colour. As soon as a player looses all their orbs they are out of the game.'
+            'Players takes it in turns to place their orbits in a cell. Once a cell has reached critical masss the orbits explode into the surrounding cells adding an extra orbits and claiming cell for the player. A player may only place their own colour. As soon as a player looses all their orbs they are out of the game.'
           )
         )
       );

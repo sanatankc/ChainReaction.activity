@@ -52,12 +52,12 @@ export default class HelpUI extends Component {
       <Container>
         <Main>
         <Welcome>Objective</Welcome>
-        <Instructions>Objective: The Objective of Chain Reaction is to take control
+        <Instructions>Objective: The objective of Chain Reaction is to take control
           of the board by eliminating your opponents orbits.</Instructions>
         <Instructions>
           Players takes it in turns to place their orbits in a cell. Once a cell has
           reached critical masss the orbits explode into the surrounding cells adding
-          an extra orbits andd claiming cell for the player. A player may only place their
+          an extra orbits and claiming cell for the player. A player may only place their
           own colour. As soon as a player looses all their orbs they are out of the game.
         </Instructions>
         </Main>
